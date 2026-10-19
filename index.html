@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tavola">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<title>Tavola – menu, ricette e spesa</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&display=swap">
+<style>
+:root{--bg:#000000;--sf:#201f1d;--tx:#f1ebe1;--mu:#a59d90;--ac:#d6bc92;--on:#241c10;--ln:#363229;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000000;--sf:#201f1d;--tx:#f1ebe1;--mu:#a59d90;--ac:#d6bc92;--on:#241c10;--ln:#363229;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#000000;--sf:#201f1d;--tx:#f1ebe1;--mu:#a59d90;--ac:#d6bc92;--on:#241c10;--ln:#363229;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:84px}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;margin:0;font-weight:700}
+header{display:flex;flex-wrap:wrap;gap:10px 16px;justify-content:space-between;align-items:center;padding:26px 18px 10px;max-width:640px;margin:0 auto}
+h1{font-size:clamp(28px,9vw,38px);letter-spacing:-.02em;line-height:1.1}
+.st{display:flex;align-items:center;gap:10px;color:var(--mu);font-size:14px}
+.st button{width:32px;height:32px;border-radius:50%;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font-size:18px}
+.st b{color:var(--tx);min-width:1ch;text-align:center;font-size:17px}
+main{max-width:640px;margin:auto;padding:0 18px}
+.day{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;padding:14px 16px 8px;margin:0 0 12px;background:linear-gradient(150deg,#2d2b27,#212220);border:1px solid var(--ln);border-radius:20px}
+.day h2{font-size:20px;padding-top:0;color:var(--ac)}
+.row{display:flex;align-items:center;gap:12px;padding:10px 0}
+.row+.row{border-top:1px dashed var(--ln)}
+.em{width:44px;height:44px;flex:none;display:grid;place-items:center;font-size:24px;background:var(--bg);border-radius:14px}
+.rc{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.rc li{display:flex;gap:12px;align-items:center;background:var(--sf);border:1px solid var(--ln);border-radius:18px;padding:10px 14px;cursor:pointer}
+.tt small{display:block;color:var(--mu);font-size:13px}
+.q{width:100%;padding:14px 18px;margin:4px 0 14px;border-radius:16px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font-size:16px}
+.mu{color:var(--mu)}
+textarea.q{resize:vertical;font-family:inherit;line-height:1.4}
+.fo{white-space:pre-line;margin-top:14px;line-height:1.55}
+.fo h3{margin:18px 0 4px;font-size:20px;color:var(--ac)}
+.fo .mu{white-space:normal}
+.sub{margin:2px 0 0;color:var(--mu);font-size:14px}
+.hero{display:flex;gap:16px;align-items:center;padding:16px;margin:4px 0 14px;border-radius:24px;background:linear-gradient(135deg,#4a4033,#2c2924);border:1px solid #5d4f3a;cursor:pointer}
+.hero .em{width:78px;height:78px;font-size:42px;border-radius:22px;background:rgba(255,255,255,.07)}
+.hero small{color:#cdbb9f}
+.hero h2{font-size:22px;margin:2px 0 6px;color:#f4ece0}
+.hero span:not(.em){color:#e6d6bb;font-size:14px}
+.kb{margin:12px 0 4px;padding:14px 16px;border:1px solid var(--ln);border-radius:18px;background:var(--sf)}
+.kb label{display:block;font-weight:600;margin-bottom:8px}
+.kb .q{margin:0 0 8px}
+.kb small{display:block}
+.lx{border:1px solid var(--ac);background:none;color:var(--ac);border-radius:10px;padding:9px 14px;font-size:15px}
+.lx.on{background:linear-gradient(135deg,#e6cfaa,#b38f62);color:#241c10;font-weight:600}
+a.b{display:inline-block;text-decoration:none}
+.dm{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 4px}
+.dm button{border:1px solid var(--ln);background:none;color:var(--mu);border-radius:999px;padding:5px 11px;font-size:13px}
+.dm button.on{background:var(--ac);color:var(--on);border-color:var(--ac);font-weight:600}
+.row b{display:block;line-height:1.3;overflow-wrap:anywhere}
+.row em{display:block;margin:2px 0 0}
+.tt,.hero>div{min-width:0}
+.rc li b,.hero h2{overflow-wrap:anywhere}
+.lst label{min-width:0;overflow-wrap:anywhere}
+.hero{gap:14px}
+.day .dm{margin-bottom:2px}
+.ph{margin:22px 0 4px;font-size:18px;color:var(--mu)}
+.lst li>span:nth-last-child(2){margin-left:auto;color:var(--mu);white-space:nowrap}
+#ck{position:fixed;inset:0;background:var(--bg);z-index:10;display:none;flex-direction:column;padding:calc(18px + env(safe-area-inset-top,0px)) 22px calc(18px + env(safe-area-inset-bottom,0px))}
+#ck.o{display:flex}
+#ck .stp{flex:1;display:flex;flex-direction:column;justify-content:center;font-size:28px;line-height:1.35;font-family:Fraunces,Georgia,serif}
+#ck .bar{display:flex;gap:10px}
+#ck .bar .b{flex:1}
+.row>div{flex:1;min-width:0;cursor:pointer}
+.row small{display:block;color:var(--mu);font-size:13px}
+.row b{font-weight:600}
+.row em{color:var(--mu);font-style:normal;font-size:13px;margin-left:6px}
+.i{border:1px solid var(--ln);background:var(--sf);color:var(--ac);border-radius:50%;width:36px;height:36px;font-size:18px}
+.b{background:linear-gradient(135deg,#e6cfaa,#b38f62);color:#241c10;border:0;border-radius:14px;padding:13px 20px;font-size:15px;font-weight:600;margin:10px 0}
+.b.s{background:none;color:var(--ac);border:1px solid var(--ln);font-weight:500}
+.lst{list-style:none;margin:0;padding:0}
+.lst li{display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--ln)}
+.lst input{width:22px;height:22px;accent-color:var(--ac)}
+.lst .d{text-decoration:line-through;color:var(--mu)}
+.lst span:last-child{margin-left:auto;color:var(--mu);white-space:nowrap}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--sf);border-top:1px solid var(--ln);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;border:0;background:none;color:var(--mu);padding:12px 2px;font-size:12.5px;white-space:nowrap;min-width:0;border-top:3px solid transparent}
+nav button.on{color:var(--ac);border-top-color:var(--ac);font-weight:600}
+#m{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;z-index:9}
+#m.o{display:flex}
+#m>div{background:var(--sf);width:100%;max-width:640px;max-height:88%;overflow:auto;border-radius:18px 18px 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom,0px))}
+#m h2{font-size:26px}
+#m h3{font-size:18px;margin:18px 0 6px}
+#m ul,#m ol{margin:0;padding-left:20px}
+#m li{padding:3px 0}
+.ct{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:6px 0 4px}
+.sg{display:flex;border:1px solid var(--ln);border-radius:10px;overflow:hidden}
+.sg button{border:0;background:var(--sf);color:var(--mu);padding:9px 14px;font-size:15px}
+.sg button.on{background:var(--ac);color:var(--on);font-weight:600}
+.ct select{padding:9px;border-radius:10px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font-size:15px}
+.ct p{flex-basis:100%;margin:0;color:var(--mu);font-size:14px}
+button:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.av{width:96px;height:96px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;background:var(--sf);border:1px solid var(--ln);font-size:40px;overflow:hidden}.av img,.st #pb img{width:100%;height:100%;object-fit:cover;display:block}.st #pb{padding:0;overflow:hidden}.pr{display:flex;gap:10px;justify-content:center;margin:0 0 14px}.pr .b{width:auto;flex:none}
+.pl{max-height:46vh;overflow:auto;margin:6px 0 12px}.pi{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--ln)}.pi input{width:92px;padding:8px 10px;border-radius:10px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font-size:16px;text-align:right}.pi small{color:var(--mu)}
+.kd{margin:14px 0}.kd summary{cursor:pointer;color:var(--ac);padding:8px 0}.k3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 4px}.k3 .q{margin:0;padding:12px}.kd select{padding:9px;margin:4px 0 10px;border-radius:10px;border:1px solid var(--ln);background:var(--sf);color:var(--tx);font-size:15px}.kd .sg{margin-top:10px;width:fit-content}
+.tg{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0 10px}.tg input{-webkit-appearance:none;appearance:none;width:48px;height:28px;border-radius:14px;background:var(--ln);position:relative;transition:background .2s;flex:none;margin:0;cursor:pointer}.tg input::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--tx);transition:left .2s}.tg input:checked{background:var(--ac)}.tg input:checked::after{left:23px;background:var(--on)}
+</style></head><body>
+<header><div><h1 id="tt">Tavola</h1><p class="sub">Pianifica, cucina, risparmia.</p></div><div class="st">persone <button onclick="sp(-1)" aria-label="Meno persone">−</button><b id="pn">2</b><button onclick="sp(1)" aria-label="Più persone">+</button><button id="pb" onclick="PRf()" aria-label="Profilo" title="Profilo">👤</button></div></header>
+<main id="v"></main>
+<nav><button data-t="m" class="on">🗓 Menu</button><button data-t="r">📖 Ricette</button><button data-t="s">🛒 Spesa</button><button data-t="f">🧊 Frigo</button></nav>
+<div id="ck"></div><div id="m" onclick="if(event.target==this)cl()"><div id="mc"></div></div>
+<script>
+const K=[1.6,1.5,1.7,2.2,2,1.8,2,2.4,2,2.3,2.6,1.7];
+const D=`Pasta e ceci|25|pasta corta:80:g;ceci cotti:120:g;passata di pomodoro:100:g;aglio:1:spicchio;rosmarino:1:rametto|Soffriggi aglio e rosmarino in poco olio.;Aggiungi passata e ceci e cuoci 10 minuti.;Lessa la pasta e uniscila al sugo.|||https://ricette.giallozafferano.it/Pasta-e-ceci.html
+Vellutata di zucca e patate|35|zucca:200:g;patate:100:g;cipolla:0.25:pezzo;brodo vegetale:250:ml;olio extravergine:1:cucchiaio|Rosola la cipolla con un filo d'olio.;Aggiungi zucca e patate a cubetti e copri con il brodo.;Cuoci 20 minuti e frulla fino a renderla liscia.|||https://ricette.giallozafferano.it/Vellutata-di-zucca-e-patate.html
+Riso con lenticchie e spinaci|30|riso:80:g;lenticchie cotte:100:g;spinaci:100:g;cipolla:0.25:pezzo;limone:0.25:pezzo|Lessa il riso e scolalo.;Stufa spinaci e cipolla in padella con poco olio.;Unisci lenticchie e riso e finisci con succo di limone.|||https://blog.giallozafferano.it/ortaggichepassionebysara/zuppa-cereali-lenticchie-e-spinaci/
+Insalata di farro e pomodori|20|farro:70:g;pomodori:150:g;olive nere:20:g;basilico:4:foglie;olio extravergine:1:cucchiaio|Lessa il farro e lascialo raffreddare.;Taglia i pomodori a pezzetti.;Mescola tutto e condisci con olio e basilico.|||https://ricette.giallozafferano.it/Insalata-di-farro-con-verdure.html
+Polpette di lenticchie|35|lenticchie cotte:150:g;pangrattato:30:g;carote:0.5:pezzo;prezzemolo:1:rametto;olio extravergine:1:cucchiaio|Schiaccia le lenticchie con la carota grattugiata e il prezzemolo.;Aggiungi il pangrattato e forma delle palline.;Cuoci in forno a 200 gradi per 20 minuti.|||https://ricette.giallozafferano.it/Polpette-di-lenticchie.html
+Spaghetti con broccoli|25|spaghetti:80:g;broccoli:150:g;aglio:1:spicchio;peperoncino:0.5:pezzo;olio extravergine:1:cucchiaio|Lessa i broccoli e tieni un po' della loro acqua.;Soffriggi aglio e peperoncino, unisci i broccoli e schiacciali.;Condisci gli spaghetti scolati nella padella.|||https://blog.giallozafferano.it/unavitaincucina/ricetta-spaghetti-con-broccoli/
+Zuppa di cavolo nero e fagioli|40|cavolo nero:100:g;fagioli cannellini cotti:120:g;carote:0.5:pezzo;sedano:0.5:costa;pane raffermo:40:g|Soffriggi carota e sedano tritati.;Aggiungi cavolo nero, fagioli e acqua e cuoci 25 minuti.;Servi sul pane tostato.|||https://blog.giallozafferano.it/valeriaciccotti/zuppa-di-fagioli-e-cavolo-nero
+Cotolette di melanzane|40|melanzane:200:g;pangrattato:40:g;farina:20:g;latte di soia:50:ml;origano:1:pizzico|Affetta le melanzane in rondelle spesse.;Passale in farina e latte di soia, poi nel pangrattato.;Cuoci in forno a 200 gradi per 25 minuti, girandole a metà.|||https://ricette.giallozafferano.it/Cotolette-di-melanzane.html
+Hummus con verdure e pane|15|ceci cotti:120:g;tahini:1:cucchiaio;limone:0.25:pezzo;carote:1:pezzo;pane integrale:60:g|Frulla ceci, tahini e succo di limone con un po' d'acqua.;Taglia le carote a bastoncini.;Servi con il pane.|||https://ricette.giallozafferano.it/Hummus-di-ceci.html
+Orecchiette con cime di rapa|30|orecchiette:80:g;cime di rapa:200:g;aglio:1:spicchio;peperoncino:0.5:pezzo;olio extravergine:1:cucchiaio|Lessa le cime di rapa nell'acqua della pasta.;Aggiungi le orecchiette e cuoci insieme.;Salta tutto in padella con aglio e peperoncino.|||https://ricette.giallozafferano.it/Orecchiette-con-le-cime-di-rapa.html
+Risotto ai funghi|35|riso:80:g;funghi champignon:150:g;cipolla:0.25:pezzo;brodo vegetale:300:ml;prezzemolo:1:rametto|Rosola la cipolla e tosta il riso.;Aggiungi i funghi e il brodo poco alla volta per 16 minuti.;Finisci con il prezzemolo tritato.|||https://ricette.giallozafferano.it/Risotto-ai-funghi-porcini.html
+Frittata di ceci|25|farina di ceci:60:g;cipolla:0.25:pezzo;zucchine:100:g;olio extravergine:1:cucchiaio;sale:1:pizzico|Sciogli la farina di ceci in acqua fredda, il doppio del suo peso, e lascia riposare.;Salta cipolla e zucchine a rondelle.;Versa la pastella e cuoci 4 minuti per lato.|||https://ricette.giallozafferano.it/Frittata-con-farina-di-ceci.html
+Pasta con zucchine e limone|20|pasta:80:g;zucchine:150:g;aglio:1:spicchio;limone:0.25:pezzo;olio extravergine:1:cucchiaio|Salta le zucchine con l'aglio.;Lessa la pasta e uniscila alle zucchine.;Finisci con scorza e succo di limone.|1.6||https://blog.giallozafferano.it/lericettedibea/pasta-zucchine-menta-e-limone
+Curry di ceci e spinaci|30|ceci cotti:120:g;spinaci:100:g;latte di cocco:60:ml;cipolla:0.25:pezzo;curry in polvere:1:cucchiaino;riso basmati:70:g|Rosola la cipolla con il curry.;Aggiungi ceci, spinaci e latte di cocco e cuoci 10 minuti.;Servi con il riso lessato.|2.4||https://blog.giallozafferano.it/creandosiimpara/ricetta-curry-di-ceci-con-spinaci
+Tofu strapazzato con verdure|20|tofu:120:g;peperoni:100:g;cipolla:0.25:pezzo;curcuma:1:pizzico;pane integrale:50:g|Sbriciola il tofu in padella con la curcuma.;Aggiungi cipolla e peperoni a listarelle.;Cuoci 8 minuti e servi con il pane.|2.6||https://blog.giallozafferano.it/msp/tofu-strapazzato-vegano
+Minestrone di verdure|45|patate:100:g;carote:1:pezzo;zucchine:100:g;fagioli borlotti cotti:80:g;pasta corta:40:g|Taglia le verdure a dadini e coprile d'acqua.;Cuoci 25 minuti, poi unisci i fagioli.;Aggiungi la pasta e cuoci altri 10 minuti.|1.7||https://ricette.giallozafferano.it/Minestrone-di-verdure.html
+Gnocchi di patate al pomodoro|25|gnocchi di patate:200:g;passata di pomodoro:120:g;basilico:4:foglie;aglio:1:spicchio|Scalda la passata con l'aglio per 10 minuti.;Lessa gli gnocchi finché vengono a galla.;Condisci e aggiungi il basilico.|2||https://ricette.giallozafferano.it/Gnocchi-al-pomodoro.html
+Pasta e fagioli|40|pasta corta:70:g;fagioli borlotti cotti:130:g;carote:0.5:pezzo;sedano:0.5:costa;passata di pomodoro:60:g|Soffriggi carota e sedano tritati.;Aggiungi fagioli, passata e acqua e cuoci 20 minuti.;Unisci la pasta e cuoci fino a cottura.|1.7
+Burger di ceci con insalata|30|ceci cotti:130:g;pangrattato:30:g;paprika:1:pizzico;insalata:60:g;pane per hamburger:1:pezzo|Schiaccia i ceci con paprika e pangrattato.;Forma i burger e cuoci 5 minuti per lato.;Servi nel panino con l'insalata.|2.5||https://ricette.giallozafferano.it/Hamburger-di-ceci.html
+Zuppa di lenticchie rosse|30|lenticchie rosse secche:70:g;carote:1:pezzo;cipolla:0.25:pezzo;curcuma:1:pizzico;brodo vegetale:300:ml|Rosola cipolla e carota.;Aggiungi lenticchie, curcuma e brodo.;Cuoci 20 minuti e frulla in parte.|1.4||https://blog.giallozafferano.it/ortaggichepassionebysara/zuppa-di-lenticchie-rosse
+Couscous con verdure|20|couscous:70:g;zucchine:100:g;pomodori:100:g;ceci cotti:60:g;menta:3:foglie|Versa acqua bollente sul couscous e copri per 5 minuti.;Salta zucchine e pomodori.;Mescola tutto con ceci e menta.|1.9||https://ricette.giallozafferano.it/Couscous-alle-verdure.html
+Pasta alla norma vegetale|30|pasta:80:g;melanzane:150:g;passata di pomodoro:100:g;basilico:4:foglie;aglio:1:spicchio|Griglia le melanzane a cubetti.;Cuoci la passata con l'aglio.;Lessa la pasta e condisci con melanzane e basilico.|2||https://blog.giallozafferano.it/incredibilemabuono/ricetta-pasta-alla-norma-vegana-senza-glutine-e-nichel/
+Insalata di quinoa e avocado|20|quinoa:70:g;avocado:0.5:pezzo;pomodori:100:g;limone:0.25:pezzo;olio extravergine:1:cucchiaio|Lessa la quinoa e lasciala raffreddare.;Taglia avocado e pomodori.;Mescola e condisci con limone e olio.|3.2||https://blog.giallozafferano.it/renatabriano/ricetta-insalata-di-quinoa-avocado-pomodorini-e-olive-taggiasche
+Patate al forno con fagioli|40|patate:250:g;fagioli cannellini cotti:100:g;rosmarino:1:rametto;olio extravergine:1:cucchiaio|Taglia le patate a spicchi e condiscile con rosmarino.;Cuoci in forno a 200 gradi per 30 minuti.;Servi con i fagioli scaldati.|1.8||https://blog.giallozafferano.it/annatorte/ricetta-patate-rosse-ripiene-con-fagioli-al-forno/
+Pollo al limone con patate|40|petto di pollo:150:g;patate:200:g;limone:0.5:pezzo;rosmarino:1:rametto;olio extravergine:1:cucchiaio|Taglia pollo e patate a pezzi e condisci con limone e rosmarino.;Cuoci in forno a 200 gradi per 30 minuti.;Servi con il fondo di cottura.|3.8|o|https://blog.giallozafferano.it/rusyna/ricetta-pollo-al-limone-e-rosmarino-con-patate-novelle-al-forno
+Spaghetti alla Carbonara|25|spaghetti:80:g;guanciale:37.5:g;tuorli:1.5:pezzo;pecorino romano:12.5:g;pepe nero:1:pizzico|Rosola il guanciale a striscioline in padella antiaderente per 10 minuti.;Sbatti i tuorli con il pecorino e il pepe fino a una crema liscia e intanto cuoci gli spaghetti al dente.;Salta la pasta nel fondo del guanciale, spegni il fuoco e unisci la crema di uova e il guanciale.|3|og|https://ricette.giallozafferano.it/Spaghetti-alla-Carbonara.html
+Salmone al forno con zucchine|25|filetto di salmone:150:g;zucchine:150:g;limone:0.25:pezzo;olio extravergine:1:cucchiaio|Disponi zucchine e salmone in teglia con olio e limone.;Cuoci in forno a 190 gradi per 15 minuti.;Servi caldo.|5.2|o|https://blog.giallozafferano.it/delizieallacannella2/filetti-salmone-al-forno-zucchine
+Lasagne al ragù|60|sfoglie di lasagna:80:g;carne macinata:100:g;passata di pomodoro:120:g;besciamella:100:ml;parmigiano:15:g|Cuoci la carne con la passata per 20 minuti.;Alterna in teglia sfoglie, ragù e besciamella.;Cuoci in forno a 180 gradi per 30 minuti.|3.6|o|https://ricette.giallozafferano.it/Lasagne-alla-Bolognese.html
+Frittata di zucchine|20|uova:2:pezzo;zucchine:150:g;parmigiano:15:g;olio extravergine:1:cucchiaio|Salta le zucchine a rondelle.;Sbatti le uova con il parmigiano e versale.;Cuoci 4 minuti per lato.|2|o|https://ricette.giallozafferano.it/Frittata-di-zucchine.html
+Risotto alla milanese|30|riso:80:g;zafferano:1:pizzico;burro:15:g;parmigiano:20:g;brodo vegetale:300:ml|Tosta il riso nel burro.;Aggiungi il brodo poco alla volta con lo zafferano.;Manteca con il parmigiano.|2.6|o|https://ricette.giallozafferano.it/Risotto-alla-milanese.html
+Merluzzo in umido|30|filetto di merluzzo:150:g;passata di pomodoro:100:g;olive nere:15:g;capperi:5:g;aglio:1:spicchio|Soffriggi l'aglio e aggiungi passata, olive e capperi.;Adagia il merluzzo e cuoci 12 minuti.;Servi con il sugo.|4.5|o|https://ricette.giallozafferano.it/Merluzzo-in-umido.html
+Polpette al sugo|40|carne macinata:120:g;pangrattato:20:g;uova:0.5:pezzo;passata di pomodoro:120:g;parmigiano:10:g|Impasta carne, uovo, pangrattato e parmigiano.;Forma le polpette e rosolale.;Cuoci nel sugo per 20 minuti.|3.4|o|https://ricette.giallozafferano.it/Polpette-al-sugo.html
+Insalata di tonno e fagioli|10|tonno in scatola:80:g;fagioli cannellini cotti:120:g;cipolla:0.25:pezzo;olio extravergine:1:cucchiaio|Scola tonno e fagioli.;Affetta sottile la cipolla.;Mescola e condisci con olio.|3|o|https://blog.giallozafferano.it/letortedigessica/insalata-di-tonno-e-fagioli
+Pasta al pesto e fagiolini|25|pasta:80:g;pesto alla genovese:40:g;fagiolini:100:g;patate:80:g|Lessa pasta, patate a cubetti e fagiolini insieme.;Scola tenendo un mestolo d'acqua.;Condisci con il pesto.|2.4|o|https://ricette.giallozafferano.it/Bavette-al-pesto-patate-e-fagiolini.html
+Hamburger con patate al forno|35|hamburger di manzo:150:g;patate:200:g;insalata:50:g;pane per hamburger:1:pezzo|Cuoci le patate a spicchi in forno a 200 gradi per 30 minuti.;Griglia l'hamburger 4 minuti per lato.;Servi nel panino con l'insalata.|4|o|https://blog.giallozafferano.it/lericettediziasimona/hamburger-al-forno-con-formaggio-filante-e-patate
+Pollo al curry con riso|35|petto di pollo:130:g;riso basmati:70:g;latte di cocco:60:ml;cipolla:0.25:pezzo;curry in polvere:1:cucchiaino|Rosola il pollo a bocconcini con cipolla e curry.;Aggiungi il latte di cocco e cuoci 15 minuti.;Servi con il riso lessato.|3.7|o|https://ricette.giallozafferano.it/Pollo-al-curry.html
+Pasta al pomodoro e basilico|20|pasta:80:g;passata di pomodoro:120:g;basilico:4:foglie;aglio:1:spicchio;olio extravergine:1:cucchiaio|Scalda aglio e passata per 10 minuti.;Lessa la pasta.;Unisci e aggiungi il basilico.|1.2||https://ricette.giallozafferano.it/Spaghetti-al-pomodoro.html
+Crema di piselli e menta|25|piselli:200:g;patate:80:g;cipolla:0.25:pezzo;brodo vegetale:250:ml;menta:3:foglie|Rosola la cipolla e aggiungi patate e piselli.;Copri con il brodo e cuoci 15 minuti.;Frulla con la menta.|1.6||https://blog.giallozafferano.it/sharonbetti/ricetta-vellutata-di-piselli-e-menta-la-ricetta-cremosa-e-veloce
+Falafel al forno con yogurt di soia|35|ceci secchi ammollati:100:g;cipolla:0.25:pezzo;prezzemolo:1:rametto;cumino:1:pizzico;yogurt di soia:60:g|Frulla ceci, cipolla, prezzemolo e cumino.;Forma delle polpettine.;Cuoci in forno a 200 gradi per 20 minuti e servi con lo yogurt.|2.3||https://ricette.giallozafferano.it/Falafel-al-forno.html
+Pasta con pesto di rucola|20|pasta:80:g;rucola:50:g;mandorle:15:g;olio extravergine:1:cucchiaio;limone:0.25:pezzo|Frulla rucola, mandorle, olio e limone.;Lessa la pasta.;Condisci con il pesto.|2.2||https://ricette.giallozafferano.it/Pasta-al-pesto-di-rucola-e-limone-con-pomodorini-confit.html
+Peperoni ripieni di riso|45|peperoni:1:pezzo;riso:50:g;pomodori:80:g;olive nere:10:g;origano:1:pizzico|Lessa il riso a metà cottura.;Mescolalo con pomodori, olive e origano e riempi i peperoni.;Cuoci in forno a 190 gradi per 30 minuti.|2.2||https://ricette.giallozafferano.it/Peperoni-ripieni-di-riso.html
+Bruschette ai fagioli e pomodoro|15|pane integrale:80:g;fagioli cannellini cotti:80:g;pomodori:100:g;aglio:0.5:spicchio;basilico:3:foglie|Tosta il pane e strofinalo con l'aglio.;Schiaccia i fagioli e spalmali sul pane.;Completa con pomodori e basilico.|1.8||https://blog.giallozafferano.it/lacucinadiloredana/bruschette-con-fagioli/
+Ratatouille con polenta|40|melanzane:100:g;zucchine:100:g;peperoni:80:g;polenta istantanea:60:g;passata di pomodoro:80:g|Cuoci le verdure a cubetti con la passata per 25 minuti.;Prepara la polenta come da confezione.;Servi le verdure sulla polenta.|2.1||https://blog.giallozafferano.it/keno/ricetta-ratatouille-di-verdure-e-polenta
+Spaghetti di zucchine e ceci|20|zucchine:250:g;ceci cotti:100:g;pomodori:80:g;aglio:1:spicchio;olio extravergine:1:cucchiaio|Taglia le zucchine a spaghetti.;Salta aglio, pomodori e ceci per 5 minuti.;Aggiungi le zucchine e cuoci 3 minuti.|2.3||https://blog.giallozafferano.it/cucinoperpassione/spaghetti-di-zucchine-e-ceci/
+Zuppa di cipolle e pane|35|cipolle:200:g;brodo vegetale:300:ml;pane raffermo:50:g;timo:1:pizzico;olio extravergine:1:cucchiaio|Stufa le cipolle a fette per 15 minuti.;Aggiungi brodo e timo e cuoci 10 minuti.;Servi sul pane tostato.|1.5||https://blog.giallozafferano.it/creandosiimpara/ricetta-zuppa-di-cipolle/
+Tabbouleh di bulgur|20|bulgur:60:g;pomodori:120:g;prezzemolo:2:rametti;menta:3:foglie;limone:0.5:pezzo|Idrata il bulgur in acqua bollente per 10 minuti.;Trita pomodori ed erbe.;Mescola tutto con il limone.|1.7||https://ricette.giallozafferano.it/Tabuleh-con-verdure.html
+Cotoletta alla milanese con insalata|30|fettina di vitello:130:g;pangrattato:40:g;uova:0.5:pezzo;burro:10:g;insalata:60:g|Passa la fettina nell'uovo e nel pangrattato.;Cuoci nel burro 4 minuti per lato.;Servi con l'insalata.|4.8|o|https://ricette.giallozafferano.it/Cotoletta-alla-milanese.html
+Parmigiana di melanzane|50|melanzane:250:g;passata di pomodoro:120:g;mozzarella:60:g;parmigiano:15:g;basilico:3:foglie|Griglia le melanzane a fette.;Alterna in teglia melanzane, passata e mozzarella.;Cuoci in forno a 180 gradi per 30 minuti.|3.2|o|https://ricette.giallozafferano.it/Parmigiana-di-melanzane.html
+Pasta alla gricia|25|pasta:80:g;guanciale:40:g;pecorino:25:g;pepe nero:1:pizzico|Rosola il guanciale finché è croccante.;Lessa la pasta e tieni un po' della sua acqua.;Manteca con pecorino, pepe e acqua di cottura.|3|o|https://ricette.giallozafferano.it/Pasta-alla-gricia.html
+Spaghetti alle vongole|30|spaghetti:80:g;vongole:250:g;aglio:1:spicchio;prezzemolo:1:rametto;vino bianco:30:ml|Apri le vongole in padella con aglio e vino.;Lessa gli spaghetti al dente.;Saltali con le vongole e il prezzemolo.|5.5|o|https://ricette.giallozafferano.it/Spaghetti-alle-vongole.html
+Pollo alla cacciatora|45|cosce di pollo:200:g;passata di pomodoro:100:g;cipolla:0.25:pezzo;olive nere:15:g;rosmarino:1:rametto|Rosola il pollo con la cipolla.;Aggiungi passata, olive e rosmarino.;Cuoci coperto per 30 minuti.|3.5|o|https://ricette.giallozafferano.it/Pollo-alla-cacciatora.html
+Uova al pomodoro con pane|20|uova:2:pezzo;passata di pomodoro:150:g;cipolla:0.25:pezzo;pane integrale:50:g;basilico:3:foglie|Cuoci passata e cipolla per 10 minuti.;Rompi le uova nel sugo e cuoci coperto 5 minuti.;Servi con il pane.|2.3|o|https://ricette.giallozafferano.it/Uova-al-pomodoro.html
+Tagliata di manzo con rucola|20|controfiletto di manzo:150:g;rucola:50:g;pomodorini:80:g;parmigiano:15:g|Scotta la carne 3 minuti per lato.;Lasciala riposare e affettala.;Servi su rucola, pomodorini e scaglie di parmigiano.|6.5|o|https://ricette.giallozafferano.it/Tagliata-al-balsamico.html
+Orecchiette con cime di rapa e salsiccia|30|orecchiette:80:g;cime di rapa:150:g;salsiccia:70:g;aglio:1:spicchio|Rosola la salsiccia sbriciolata con l'aglio.;Lessa orecchiette e cime di rapa insieme.;Salta tutto in padella.|3.4|o|https://blog.giallozafferano.it/cuochinprogress/orecchiette-con-cime-di-rapa-e-salsiccia
+Branzino al forno con patate|40|branzino:200:g;patate:200:g;limone:0.25:pezzo;prezzemolo:1:rametto;olio extravergine:1:cucchiaio|Disponi patate a fette e branzino in teglia.;Condisci con olio, limone e prezzemolo.;Cuoci in forno a 200 gradi per 30 minuti.|6|o|https://blog.giallozafferano.it/pelledipollo/branzino-al-forno-con-patate
+Crespelle agli spinaci|40|farina:50:g;latte:120:ml;uova:0.5:pezzo;spinaci:100:g;ricotta:60:g|Prepara la pastella con farina, latte e uovo e cuoci le crespelle.;Riempile con spinaci e ricotta.;Gratinale in forno 10 minuti a 200 gradi.|2.8|o|https://ricette.giallozafferano.it/Crespelle-agli-spinaci-al-forno.html
+Filetto di manzo al pepe verde|30|filetto di manzo:180:g;pepe verde in grani:1:cucchiaino;panna fresca:40:ml;cognac:20:ml;burro:15:g;patate:150:g|Rosola il filetto nel burro 3 minuti per lato e tienilo al caldo.;Sfuma con il cognac, aggiungi pepe verde e panna e riduci.;Servi con le patate arrosto e la salsa.|14|ol|https://ricette.giallozafferano.it/Filetto-al-pepe-verde.html
+Astice alla catalana|35|astice:0.5:pezzo;pomodori:100:g;cipolla rossa:0.25:pezzo;olio extravergine:1:cucchiaio;limone:0.25:pezzo|Lessa l'astice 8 minuti e dividilo a metà.;Taglia pomodori e cipolla e condisci con olio e limone.;Servi l'astice sulle verdure.|18|ol|https://ricette.giallozafferano.it/Astice-alla-Catalana.html
+Capesante gratinate al limone|25|capesante:4:pezzo;burro:20:g;pangrattato:15:g;prezzemolo:1:rametto;limone:0.25:pezzo|Apri le capesante e condiscile con burro e prezzemolo.;Cospargi di pangrattato.;Gratina in forno a 220 gradi per 8 minuti e servi con il limone.|13|ol|https://blog.giallozafferano.it/cucinaplus/capesante-gratinate-al-limone
+Tagliolini al tartufo nero|20|tagliolini freschi:100:g;tartufo nero:10:g;burro:25:g;parmigiano:20:g|Lessa i tagliolini 2 minuti.;Salta in padella con il burro.;Manteca con il parmigiano e grattugia sopra il tartufo.|12|ol|https://blog.giallozafferano.it/eleme/2018/12/14/tagliolini-al-tartufo-ricetta-raffinata
+Petto d'anatra all'arancia|35|petto d'anatra:180:g;arance:1:pezzo;miele:1:cucchiaino;aceto balsamico:1:cucchiaio;patate:150:g|Incidi la pelle del petto e cuocila a freddo in padella per 8 minuti.;Gira, cuoci altri 4 minuti e lascia riposare.;Riduci succo d'arancia, miele e aceto e servi con le patate.|11|ol|https://blog.giallozafferano.it/renatabriano/ricetta-anatra-allarancia
+Gamberi rossi crudi con burrata|15|gamberi rossi:150:g;burrata:80:g;limone:0.5:pezzo;olio extravergine:1:cucchiaio;pepe rosa:1:pizzico|Sguscia i gamberi e condiscili con olio e limone.;Adagiali sulla burrata.;Finisci con il pepe rosa.|16|ol|https://blog.giallozafferano.it/atavolacontea/ricetta-tartare-di-gamberi-e-burrata/
+Risotto agli scampi|40|riso carnaroli:80:g;scampi:150:g;brodo di pesce:300:ml;vino bianco:30:ml;burro:15:g|Sguscia gli scampi e usa le teste per il brodo.;Tosta il riso, sfuma con il vino e cuoci col brodo per 16 minuti.;Manteca con il burro e aggiungi gli scampi a crudo.|15|ol|https://ricette.giallozafferano.it/Risotto-alla-crema-di-scampi.html
+Costolette d'agnello in crosta di pistacchi|35|costolette d'agnello:200:g;pistacchi:30:g;pangrattato:20:g;senape:1:cucchiaino;rosmarino:1:rametto|Scotta le costolette 2 minuti per lato.;Spalmale di senape e copri con pistacchi tritati e pangrattato.;Cuoci in forno a 200 gradi per 10 minuti.|12|ol|https://ricette.giallozafferano.it/Costolette-d-agnello-in-crosta.html
+Risotto ai porcini e tartufo|40|riso carnaroli:80:g;funghi porcini:120:g;tartufo nero:8:g;brodo vegetale:300:ml;vino bianco:30:ml|Rosola i porcini a fettine.;Tosta il riso, sfuma con il vino e cuoci col brodo per 16 minuti.;Unisci i porcini e finisci con il tartufo grattugiato.|10|l|https://ricette.giallozafferano.it/Risotto-ai-funghi-porcini-e-tartufo.html
+Millefoglie di melanzane e pomodorini confit|45|melanzane:200:g;pomodorini ciliegino:120:g;basilico:4:foglie;olio extravergine:2:cucchiaio;pinoli:15:g|Griglia le melanzane a fette.;Cuoci i pomodorini in forno a 150 gradi per 30 minuti.;Alterna melanzane e pomodorini a strati con basilico e pinoli.|7|l|https://blog.giallozafferano.it/mollichedizucchero/millefoglie-di-melanzane-e-pomodorini
+Gnocchi di zucca con salsa di noci|40|zucca:200:g;farina:80:g;noci:30:g;salvia:3:foglie;olio extravergine:1:cucchiaio|Cuoci la zucca e schiacciala con la farina.;Forma gli gnocchi e lessali finché vengono a galla.;Condiscili con salvia e noci tostate.|6|l|https://blog.giallozafferano.it/gingernigella/gnocchi-di-zucca
+Asparagi con crema di mandorle e tartufo|25|asparagi:200:g;mandorle:30:g;tartufo nero:6:g;limone:0.25:pezzo;olio extravergine:1:cucchiaio|Lessa gli asparagi 5 minuti.;Frulla le mandorle con olio, limone e un po' d'acqua.;Servi gli asparagi sulla crema con il tartufo grattugiato.|8|l|https://blog.giallozafferano.it/unacamerieraincucina2701/ricetta-asparagi-con-uova-tartufo-e-mandorle/`.split("\n").map((l,x)=>{const p=l.split("|");return{c:+p[4]||K[x],o:(p[5]||"").includes("o"),g:(p[5]||"").includes("g"),l:(p[5]||"").includes("l"),n:p[0],u:p[6]||"",m:+p[1],i:p[2].split(";").map(x=>{const q=x.split(":");return{n:q[0],q:+q[1],u:q[2]}}),s:p[3].split(";")}});
+const gz=r=>r.u||"https://www.giallozafferano.it/ricerca-ricette/"+encodeURIComponent(r.n).replace(/%20/g,"+")+"/";
+const G=["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Domenica"];
+let S={p:2,d:"v",b:60,l:0,m:"t",dm:["t","t","t","t","t","t","t"],f:{},ex:"",pa:{},menu:null,chk:{},portions:{}},T="m",Q="";
+try{Object.assign(S,JSON.parse(localStorage.getItem("tavola")||"{}"))}catch(e){}
+S.portions=S.portions||{};
+const sv=()=>{try{localStorage.setItem("tavola",JSON.stringify(S))}catch(e){}};
+const PR={};`aceto balsamico|cucchiaio|.12
+aglio|spicchio|.04
+arance|pezzo|.45
+asparagi|g|8
+astice|pezzo|18
+avocado|pezzo|1.4
+basilico|foglie|.03
+besciamella|ml|3.6
+branzino|g|16
+brodo di pesce|ml|2.5
+brodo vegetale|ml|1
+broccoli|g|2.8
+bulgur|g|3.5
+burrata|g|14
+burro|g|10
+capesante|pezzo|2.6
+capperi|g|14
+carne macinata|g|9.5
+carote|pezzo|.2
+cavolo nero|g|5
+ceci cotti|g|2.6
+ceci secchi ammollati|g|1.8
+cime di rapa|g|4.5
+cipolla|pezzo|.3
+cipolla rossa|pezzo|.4
+cipolle|g|1.8
+cognac|ml|25
+controfiletto di manzo|g|26
+cosce di pollo|g|6
+costolette d'agnello|g|24
+couscous|g|3.2
+cumino|pizzico|.01
+curcuma|pizzico|.01
+curry in polvere|cucchiaino|.06
+fagioli borlotti cotti|g|2.6
+fagioli cannellini cotti|g|2.6
+fagiolini|g|4
+farina|g|1.1
+farina di ceci|g|4
+farro|g|4.2
+fettina di vitello|g|22
+filetto di manzo|g|38
+filetto di merluzzo|g|15
+filetto di salmone|g|21
+funghi champignon|g|6.5
+funghi porcini|g|22
+gamberi rossi|g|38
+gnocchi di patate|g|3.2
+guanciale|g|15
+hamburger di manzo|g|12
+insalata|g|6
+latte|ml|1.6
+latte di cocco|ml|4
+latte di soia|ml|1.9
+lenticchie cotte|g|3.2
+lenticchie rosse secche|g|4
+limone|pezzo|.35
+mandorle|g|15
+melanzane|g|3.2
+menta|foglie|.03
+miele|cucchiaino|.08
+mozzarella|g|8.5
+noci|g|17
+olio extravergine|cucchiaio|.12
+olive nere|g|9
+orecchiette|g|3
+origano|pizzico|.01
+pane integrale|g|3.5
+pane per hamburger|pezzo|.4
+pane raffermo|g|2.5
+pangrattato|g|2.8
+panna fresca|ml|7
+paprika|pizzico|.01
+parmigiano|g|22
+passata di pomodoro|g|1.6
+pasta|g|1.7
+pasta corta|g|1.7
+patate|g|1.4
+pecorino|g|18
+pecorino romano|g|20
+pepe nero|pizzico|.01
+pepe rosa|pizzico|.02
+pepe verde in grani|cucchiaino|.15
+peperoncino|pezzo|.15
+peperoni|g|3.5
+peperoni|pezzo|1
+pesto alla genovese|g|14
+petto d'anatra|g|26
+petto di pollo|g|9
+pinoli|g|70
+piselli|g|3.5
+pistacchi|g|30
+polenta istantanea|g|3.5
+pomodori|g|3.2
+pomodorini|g|4
+pomodorini ciliegino|g|4.2
+prezzemolo|rametti|.04
+prezzemolo|rametto|.04
+quinoa|g|8
+ricotta|g|7
+riso|g|2.6
+riso basmati|g|4
+riso carnaroli|g|4
+rosmarino|rametto|.05
+rucola|g|12
+sale|pizzico|.003
+salsiccia|g|9
+salvia|foglie|.03
+scampi|g|32
+sedano|costa|.12
+senape|cucchiaino|.04
+sfoglie di lasagna|g|5
+spaghetti|g|1.7
+spinaci|g|4.5
+tagliolini freschi|g|7
+tahini|cucchiaio|.25
+tartufo nero|g|800
+timo|pizzico|.01
+tofu|g|9
+tonno in scatola|g|14
+tuorli|pezzo|.3
+uova|pezzo|.35
+vino bianco|ml|4
+vongole|g|9
+yogurt di soia|g|4.5
+zafferano|pizzico|1
+zucca|g|2.4
+zucchine|g|2.4`.split("\n").forEach(l=>{const p=l.split("|");PR[p[0]+"|"+p[1]]=+p[2]});
+const pv=(n,u)=>{const k=n+"|"+u;return S.pp&&S.pp[k]!=null?S.pp[k]:PR[k]};
+const pz=x=>{const v=pv(x.n,x.u);return v==null?null:x.q*v/(x.u=="g"||x.u=="ml"?1000:1)};
+function RC(){D.forEach(r=>{if(r.c0==null)r.c0=r.c;let t=0,ok=1;r.i.forEach(x=>{const v=pz(x);if(v==null)ok=0;else t+=v});r.c=ok?t:r.c0})}
+RC();
+function PE(){const ks=Object.keys(PR).sort((a,b)=>a.localeCompare(b,"it"));mc.innerHTML='<h2>Prezzi ingredienti</h2><p class="mu">Sono prezzi medi indicativi: correggili con quelli del tuo supermercato. Per grammi e millilitri il prezzo è al kg o al litro, per gli altri a unità.</p><input class="q" placeholder="Cerca un ingrediente" oninput="PF(this.value)" aria-label="Cerca un ingrediente"><div class="pl">'+ks.map(k=>{const[n,u]=k.split("|");return'<label class="pi"><span>'+esc(n)+' <small>€/'+(u=="g"?"kg":u=="ml"?"l":u)+'</small></span><input type="number" min="0" step="any" inputmode="decimal" data-k="'+encodeURIComponent(k)+'" value="'+pv(n,u)+'" onchange="PS(this)"></label>'}).join("")+'</div><button class="b s" onclick="PX()">Ripristina</button> <button class="b" onclick="cl()">Chiudi</button>';m.classList.add("o")}
+function PF(v){v=v.toLowerCase();document.querySelectorAll(".pi").forEach(e=>e.style.display=e.textContent.toLowerCase().includes(v)?"":"none")}
+function PS(e){const k=decodeURIComponent(e.dataset.k),v=parseFloat(String(e.value).replace(",","."));S.pp=S.pp||{};if(isFinite(v)&&v>=0)S.pp[k]=v;else{delete S.pp[k];e.value=PR[k]}sv();RC();R()}
+function PX(){S.pp={};sv();RC();R();PE()}
+
+const KC={};`aceto balsamico|cucchiaio|13
+aglio|spicchio|6
+arance|pezzo|85
+asparagi|g|24
+astice|pezzo|190
+avocado|pezzo|230
+basilico|foglie|.3
+besciamella|ml|110
+branzino|g|97
+brodo di pesce|ml|8
+brodo vegetale|ml|4
+broccoli|g|34
+bulgur|g|342
+burrata|g|330
+burro|g|717
+capesante|pezzo|22
+capperi|g|23
+carne macinata|g|250
+carote|pezzo|34
+cavolo nero|g|49
+ceci cotti|g|120
+ceci secchi ammollati|g|175
+cime di rapa|g|22
+cipolla|pezzo|40
+cipolla rossa|pezzo|40
+cipolle|g|40
+cognac|ml|230
+controfiletto di manzo|g|150
+cosce di pollo|g|160
+costolette d'agnello|g|240
+couscous|g|360
+cumino|pizzico|1.5
+curcuma|pizzico|1.3
+curry in polvere|cucchiaino|7
+fagioli borlotti cotti|g|95
+fagioli cannellini cotti|g|90
+fagiolini|g|31
+farina|g|350
+farina di ceci|g|335
+farro|g|340
+fettina di vitello|g|115
+filetto di manzo|g|140
+filetto di merluzzo|g|80
+filetto di salmone|g|190
+funghi champignon|g|22
+funghi porcini|g|30
+gamberi rossi|g|90
+gnocchi di patate|g|150
+guanciale|g|650
+hamburger di manzo|g|230
+insalata|g|15
+latte|ml|46
+latte di cocco|ml|180
+latte di soia|ml|35
+lenticchie cotte|g|100
+lenticchie rosse secche|g|340
+limone|pezzo|20
+mandorle|g|600
+melanzane|g|22
+menta|foglie|.3
+miele|cucchiaino|21
+mozzarella|g|253
+noci|g|654
+olio extravergine|cucchiaio|80
+olive nere|g|120
+orecchiette|g|360
+origano|pizzico|1
+pane integrale|g|250
+pane per hamburger|pezzo|160
+pane raffermo|g|270
+pangrattato|g|390
+panna fresca|ml|330
+paprika|pizzico|1.2
+parmigiano|g|392
+passata di pomodoro|g|28
+pasta|g|355
+pasta corta|g|355
+patate|g|77
+pecorino|g|387
+pecorino romano|g|387
+pepe nero|pizzico|1
+pepe rosa|pizzico|1
+pepe verde in grani|cucchiaino|6
+peperoncino|pezzo|2
+peperoni|g|26
+peperoni|pezzo|40
+pesto alla genovese|g|460
+petto d'anatra|g|240
+petto di pollo|g|110
+pinoli|g|670
+piselli|g|80
+pistacchi|g|600
+polenta istantanea|g|350
+pomodori|g|18
+pomodorini|g|18
+pomodorini ciliegino|g|18
+prezzemolo|rametti|1
+prezzemolo|rametto|1
+quinoa|g|370
+ricotta|g|150
+riso|g|350
+riso basmati|g|350
+riso carnaroli|g|350
+rosmarino|rametto|1
+rucola|g|25
+sale|pizzico|0
+salsiccia|g|300
+salvia|foglie|.3
+scampi|g|70
+sedano|costa|7
+senape|cucchiaino|5
+sfoglie di lasagna|g|350
+spaghetti|g|355
+spinaci|g|23
+tagliolini freschi|g|290
+tahini|cucchiaio|90
+tartufo nero|g|30
+timo|pizzico|1
+tofu|g|120
+tonno in scatola|g|150
+tuorli|pezzo|60
+uova|pezzo|75
+vino bianco|ml|70
+vongole|g|40
+yogurt di soia|g|45
+zafferano|pizzico|0
+zucca|g|26
+zucchine|g|17`.split("\n").forEach(l=>{const p=l.split("|");KC[p[0]+"|"+p[1]]=+p[2]});
+const kz=x=>{const v=KC[x.n+"|"+x.u];return v==null?null:x.q*v/(x.u=="g"||x.u=="ml"?100:1)};
+function RK(){D.forEach(r=>{let t=0,ok=1;r.i.forEach(x=>{const v=kz(x);if(v==null)ok=0;else t+=v});r.k=ok?Math.round(t):null})}
+RK();
+function TK(){const p=S.pf;if(!p||!(p.e>=18&&p.e<=100&&p.w>=30&&p.w<=300&&p.h>=120&&p.h<=230))return null;const b=10*p.w+6.25*p.h-5*p.e+(p.g=="f"?-161:5),t=b*(p.a||1.375),o=p.o=="p"?.85:p.o=="a"?1.1:1;return{b:Math.round(b),t:Math.round(t),g:Math.round(Math.max(t*o,b))}}
+const TP=()=>{if(!S.kc)return null;const k=TK();return k?k.g*.7:null};
+const nf=n=>Math.round(n).toLocaleString("it");
+function KT(){const k=TK();return k?"Metabolismo a riposo circa "+nf(k.b)+" kcal, fabbisogno circa "+nf(k.t)+" kcal al giorno, obiettivo circa <b>"+nf(k.g)+" kcal</b>. Per pranzo e cena (circa il 70%): "+nf(k.g*.7)+" kcal. È una stima: per esigenze particolari chiedi a un medico o a un dietista.":"Inserisci età (dai 18 anni), peso e altezza per vedere il tuo obiettivo."}
+function PKh(){const p=S.pf||{},o=(v,t,c)=>`<option value="${v}"${c==v?" selected":""}>${t}</option>`,i=(f,ph,mn)=>`<input class="q" type="number" inputmode="decimal" placeholder="${ph}" value="${p[f]||""}" onchange="PK('${f}',this.value)">`;
+return`<details class="kd"${S.kc?" open":""}><summary>🎯 Calorie</summary><label class="tg"><span>Mostra e usa le calorie</span><input type="checkbox" id="kon" ${S.kc?"checked":""} onchange="PO(this.checked)" aria-label="Attiva le calorie"></label><div id="kf"${S.kc?"":' style="display:none"'}><p class="mu">Facoltativo: serve solo a stimare il tuo fabbisogno, resta su questo telefono ed è valido dai 18 anni.</p><div class="sg"><button id="kgm" class="${p.g!="f"?"on":""}" onclick="PK('g','m')">Uomo</button><button id="kgf" class="${p.g=="f"?"on":""}" onclick="PK('g','f')">Donna</button></div><div class="k3">${i("e","Età")}${i("w","Peso kg")}${i("h","Altezza cm")}</div><select onchange="PK('a',this.value)" aria-label="Attività">${o(1.2,"Sedentario",p.a||1.375)}${o(1.375,"Poco attivo",p.a||1.375)}${o(1.55,"Attivo",p.a||1.375)}${o(1.725,"Molto attivo",p.a||1.375)}</select> <select onchange="PK('o',this.value)" aria-label="Obiettivo">${o("m","Mantenere",p.o||"m")}${o("p","Perdere peso piano",p.o||"m")}${o("a","Aumentare",p.o||"m")}</select><p class="mu" id="kt">${KT()}</p></div></details>`}
+function PO(on){S.kc=on?1:0;sv();const f=document.getElementById("kf");if(f)f.style.display=on?"block":"none";R()}
+function PK(f,v){S.pf=S.pf||{};if(f=="g"||f=="o")S.pf[f]=v;else{const n=parseFloat(String(v).replace(",","."));if(isFinite(n))S.pf[f]=n;else delete S.pf[f]}sv();const t=document.getElementById("kt");if(t)t.innerHTML=KT();const a=document.getElementById("kgm"),b=document.getElementById("kgf");if(a&&b){a.classList.toggle("on",S.pf.g!="f");b.classList.toggle("on",S.pf.g=="f")}R()}
+const portion=k=>{const n=Number(S.portions[k]);return Number.isFinite(n)&&n>=.25&&n<=4?n:1};
+const dkc=d=>{if(!S.kc)return"";const t=[0,1].reduce((s,x)=>{const k=d*2+x;return s+(ac(k)&&D[S.menu[k]].k?D[S.menu[k]].k*portion(k):0)},0);return t?` <small class="mu">· ${nf(t)} kcal</small>`:""};
+function KS2(){if(!S.kc)return"";const target=TP();if(!target)return"";let total=0,days=0;S.menu.forEach((i,k)=>{if(ac(k)&&D[i].k){total+=D[i].k*portion(k);if(k%2===0||!ac(k-1))days++}});if(!days)return"";const average=total/days;return`<p>Media dei pasti programmati: circa ${nf(average)} kcal al giorno a persona; obiettivo per pranzo e cena circa ${nf(target)} kcal.${average<target*.8?" Puoi aumentare le porzioni dal dettaglio del pasto e avvicinarti al tuo obiettivo.":average>target*1.2?" Le porzioni programmate superano l’obiettivo stimato.":""}</p>`}
+
+const ac=k=>{const m=S.dm[k>>1];return m=="t"||(m=="p"?k%2==0:k%2==1)};
+const cost=m=>m.reduce((s,i,k)=>s+(ac(k)?D[i].c*portion(k):0),0)*S.p;
+const AL={glutine:"pasta,pane,pangrattato,farro,couscous,bulgur,orecchiette,spaghetti,gnocchi,tagliolini,sfoglie,polenta,cotolette,crespelle",latticini:"parmigiano,pecorino,mozzarella,burro,ricotta,burrata,panna,besciamella,crespelle",lattosio:"parmigiano,pecorino,mozzarella,burro,ricotta,burrata,panna,besciamella,crespelle","frutta secca":"noci,mandorle,pinoli,pistacchi,nocciole",soia:"tofu,soia",uova:"uova,frittata",pesce:"salmone,merluzzo,branzino,tonno,vongole,gamberi,scampi,astice,capesante"};
+const xs=r=>{const h=(r.n+" "+r.i.map(x=>x.n).join(" ")).toLowerCase();return S.ex.toLowerCase().split(",").map(s=>s.trim()).filter(Boolean).flatMap(t=>AL[t]?AL[t].split(","):[t]).some(k=>h.includes(k))};
+const pick=()=>{const w=D.map((r,i)=>[i,Math.random()-(r.o?.4:0)-(S.l&&r.l?.45:0)-(S.f[i]?.3:0)]).filter(x=>(S.d=="o"||!D[x[0]].o)&&(S.l||!D[x[0]].l)&&!xs(D[x[0]])).sort((a,b)=>a[1]-b[1]).map(x=>x[0]);return w.length?w.slice(0,14):D.map((_,i)=>i).slice(0,14)};
+function gen(){const T=TP();let b=null,bs=1e18;for(let n=0;n<300;n++){const m=pick(),c=cost(m),sc=(c>S.b?1e6+c:0)+(T?m.reduce((a,i,k)=>a+(ac(k)&&D[i].k?Math.abs(D[i].k-T/2):0),0):0);if(sc<bs){b=m;bs=sc}if(!T&&c<=S.b)break}while(b.length<14)b=b.concat(b);S.menu=b.slice(0,14);S.chk={};sv()}
+function sd(x){S.d=x;gen();R()}
+function sl(){S.l=!S.l;gen();R()}
+function pm(d,x){S.dm[d]=x;sv();R()}
+function sb(v){S.b=+v;gen();R()}
+if(!S.menu||S.menu.length!=14)gen();
+const M={0:"",.25:"¼",.5:"½",.75:"¾"};
+function f(q){if(q>=10)return Math.round(q);const w=Math.floor(q),k=Math.round((q-w)*4)/4;return k==1?w+1:(w||"")+M[k]}
+const sc=(r,k=null)=>r.i.map(x=>`<li>${f(x.q*S.p*(k==null?1:portion(k)))} ${x.u} ${x.n}</li>`).join("");
+function sp(d){S.p=Math.max(1,Math.min(8,S.p+d));sv();pn.textContent=S.p;R()}
+function sw(k){const pl=D.map((_,i)=>i).filter(i=>(S.d=="o"||!D[i].o)&&(S.l||!D[i].l)&&!xs(D[i]));let n,t=0;do{n=pl[Math.floor(Math.random()*pl.length)];const c=S.menu.slice();c[k]=n;if(n!=S.menu[k]&&cost(c)<=S.b)break}while(++t<40);if(n==S.menu[k])return;S.menu[k]=n;sv();R()}
+function setPortion(k,v){const n=parseFloat(String(v).replace(",","."));if(!Number.isFinite(n)||n<.25||n>4)return;S.portions[k]=Math.round(n*100)/100;sv();R();o(S.menu[k],k)}
+function fitPortion(k){const r=D[S.menu[k]],target=TP();if(!target||!r.k)return;S.portions[k]=Math.max(.25,Math.min(4,Math.round(target/2/r.k*100)/100));sv();R();o(S.menu[k],k)}
+function fitAllPortions(){const target=TP();if(!target)return;for(let d=0;d<7;d++){const meals=[0,1].map(s=>d*2+s).filter(k=>ac(k)&&D[S.menu[k]].k>0);if(!meals.length)continue;const perMeal=target/meals.length;meals.forEach(k=>{const kcal=D[S.menu[k]].k;S.portions[k]=Math.max(.25,Math.min(4,Math.round(perMeal/kcal*100)/100))})}sv();R()}
+function scheduleRecipe(i){const day=+document.getElementById("plan-day").value,meal=+document.getElementById("plan-meal").value,k=day*2+meal;if(S.menu[k]!==i)S.portions[k]=1;S.menu[k]=i;if(!ac(k))S.dm[day]="t";sv();R();o(i,k)}
+function picker(k){mc.innerHTML=`<h2>Scegli la ricetta</h2><p class="mu">${G[k>>1]} · ${k%2?"Cena":"Pranzo"}</p><input class="q" placeholder="Filtra per nome o ingrediente" oninput="filterPicker(this.value)" aria-label="Filtra ricette"><ul class="rc" id="picklist">${D.map((r,i)=>`<li role="button" tabindex="0" data-search="${esc((r.n+" "+r.i.map(x=>x.n).join(" ")).toLowerCase())}" onclick="planRecipe(${i},${k})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();planRecipe(${i},${k})}"><span class="em">${em(r.n)}</span><span class="tt"><b>${esc(r.n)}</b><small>${r.m} min · ${r.k?nf(r.k)+" kcal a persona":""}</small></span></li>`).join("")}</ul><button class="b s" onclick="cl()">Chiudi</button>`;m.classList.add("o")}
+function filterPicker(q){const v=q.trim().toLowerCase();document.querySelectorAll("#picklist li").forEach(e=>e.style.display=e.dataset.search.includes(v)?"":"none")}
+function planRecipe(i,k){if(S.menu[k]!==i)S.portions[k]=1;S.menu[k]=i;sv();R();o(i,k)}
+function o(i,k=null){const r=D[i],day=(new Date().getDay()+6)%7,meal=new Date().getHours()<15?0:1,d=k==null?day:k>>1,s=k==null?meal:k%2,p=k==null?1:portion(k),kcal=r.k?nf(r.k*p):"non disponibile";mc.innerHTML=`<h2>${em(r.n)} ${r.n}</h2><small>${r.m} minuti · circa €${(r.c*S.p*p).toFixed(1).replace(".",",")} · per ${S.p} ${S.p>1?"persone":"persona"}</small><h3>Ingredienti</h3><ul>${sc(r,k)}</ul>${k!=null?`<div class="kb"><label for="portion">Porzione per persona (moltiplicatore)</label><input id="portion" class="q" type="number" inputmode="decimal" min="0.25" max="4" step="0.01" value="${p}" onchange="setPortion(${k},this.value)"><small>${kcal} kcal a persona${TP()?" · obiettivo stimato "+nf(TP()/2)+" kcal a pasto":""}. Quantità ingredienti calcolate per ${S.p} ${S.p>1?"persone":"persona"}.</small>${TP()?`<button class="b s" onclick="fitPortion(${k})">Adatta al fabbisogno</button>`:""}</div>`:""}<h3>Programma nel menu</h3><div class="ct"><select id="plan-day" aria-label="Giorno">${G.map((g,x)=>`<option value="${x}"${x==d?" selected":""}>${g}</option>`).join("")}</select><select id="plan-meal" aria-label="Pasto"><option value="0"${s==0?" selected":""}>Pranzo</option><option value="1"${s==1?" selected":""}>Cena</option></select><button class="b" onclick="scheduleRecipe(${i})">${k==null?"Programma ricetta":"Sposta ricetta"}</button></div><h3>Preparazione</h3><ol>${r.s.map(x=>`<li>${x}</li>`).join("")}</ol><a class="b" href="${gz(r)}" target="_blank" rel="noopener">📖 ${r.u?"Apri su":"Cerca su"} GialloZafferano</a> <button class="b s" onclick="ck(${i})">🍳 Cucina</button> <button class="b s" onclick="fv(${i})">${S.f[i]?"♥ Nei preferiti":"♡ Preferita"}</button> <button class="b s" onclick="cl()">Chiudi</button>`;m.classList.add("o")}
+function cl(){m.classList.remove("o")}
+function T0(){const t=S.nm?"Tavola di "+S.nm:"Tavola";tt.textContent=t;document.title=t}
+function EXf(){return`<div class="kb"><label for="avoid">Ingredienti da evitare</label><input id="avoid" class="q" placeholder="Per esempio: glutine, noci, cipolla" value="${esc(S.ex).replace(/"/g,"&quot;")}" onchange="S.ex=this.value;gen();R()"><small class="mu">Puoi inserire ingredienti separati da virgole. Le esclusioni valgono per i nuovi menu e i suggerimenti.</small></div>`}
+function PRf(first){mc.innerHTML='<h2>'+(first?"Benvenuto 👋":"Il tuo profilo")+'</h2><div class="av" id="pav"></div><div class="pr"><button class="b s" onclick="document.getElementById(\'pf\').click()">📷 Scegli foto</button><button class="b s" onclick="PHr()">Rimuovi</button><input type="file" id="pf" accept="image/*" hidden onchange="PHo(this.files[0])"></div><p class="mu">'+(first?"Come ti chiami? Lo uso per intitolare l\'app.":"Il nome compare nel titolo dell\'app.")+'</p><input id="pnm" class="q" maxlength="24" autocomplete="given-name" placeholder="Il tuo nome" value="'+esc(S.nm||"")+'" onkeydown="if(event.key==\'Enter\')ps()">'+(first?"":EXf()+PKh())+'<button class="b" onclick="ps()">Salva</button>'+(first?' <button class="b s" onclick="S.seen=1;sv();cl()">Salta</button>':"");m.classList.add("o");PHu();setTimeout(()=>{const i=document.getElementById("pnm");i&&i.focus()},50)}
+function PHu(){const h=S.ph?'<img src="'+S.ph+'" alt="">':"👤",a=document.getElementById("pav"),b=document.getElementById("pb");if(a)a.innerHTML=h;if(b)b.innerHTML=h}
+function PHo(f){if(!f)return;const u=URL.createObjectURL(f),i=new Image();i.onload=()=>{const n=256,c=document.createElement("canvas");c.width=c.height=n;const s=Math.min(i.width,i.height);c.getContext("2d").drawImage(i,(i.width-s)/2,(i.height-s)/2,s,s,0,0,n,n);try{S.ph=c.toDataURL("image/jpeg",.82);sv()}catch(e){}URL.revokeObjectURL(u);PHu()};i.onerror=()=>URL.revokeObjectURL(u);i.src=u}
+function PHr(){delete S.ph;sv();PHu()}
+function ps(){S.nm=document.getElementById("pnm").value.trim().slice(0,24);S.seen=1;sv();T0();cl()}
+const E=[[/astice|aragosta|gamber|scamp|capesant|ostric/,"🦞"],[/pollo|cacciatora|anatra/,"🍗"],[/salmone|merluzzo|branzino|tonno|vongole/,"🐟"],[/frittata|uova/,"🍳"],[/zuppa|vellutata|minestrone|crema|pasta e /,"🍲"],[/burger|hamburger|polpette|falafel/,"🍔"],[/insalata|tabbouleh|quinoa/,"🥗"],[/curry/,"🍛"],[/pasta|spaghetti|orecchiette|gnocchi|crespelle|couscous|lasagne/,"🍝"],[/riso|risotto|peperoni/,"🍚"],[/melanzane|parmigiana|ratatouille|zucchine/,"🍆"],[/manzo|cotolett|tagliata/,"🥩"],[/hummus|bruschette|patate|tofu/,"🥙"]];
+const em=n=>{n=n.toLowerCase();return(E.find(x=>x[0].test(n))||[0,"🥘"])[1]};
+let F="",FO="";
+const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const fmt=t=>esc(t).replace(/^## (.*)\n?/gm,"<h3>$1</h3>");
+function FR(){return `<p class="mu">Scrivi cosa hai in frigo e in dispensa: ti propongo 3 ricette${S.d=="v"?" vegetali":""} per ${S.p} ${S.p>1?"persone":"persona"}.</p><textarea id="fr" class="q" rows="4" placeholder="Per esempio: zucchine, un po' di riso, ceci, mezza cipolla, limone" oninput="F=this.value">${esc(F)}</textarea><div class="kb"><label for="gk">Chiave API di Gemini (facoltativa)</label><input id="gk" class="q" type="password" autocomplete="off" placeholder="Incolla qui la tua chiave" value="${esc(S.k||"")}" onchange="S.k=this.value.trim();sv()"><small class="mu">Resta solo su questo dispositivo. Serve per la funzione Frigo.</small></div><button class="b" id="fb" onclick="ask()">Proponi ricette</button><div id="fo" class="fo">${FO}</div>`}
+async function ask(){const t=F.trim();if(!t)return;const fo=document.getElementById("fo"),b=document.getElementById("fb");let sm=null;try{sm=await claude.use("sample")}catch(e){}
+if(!sm&&!S.k){fo.innerHTML=`<p class="mu">Per usare il frigo inserisci la tua chiave Gemini nelle impostazioni.</p>`;return}
+b.disabled=true;fo.textContent="Sto pensando…";
+const P=`Sei un cuoco italiano pratico. In frigo e in dispensa ho: ${t}.\nProponi 3 ricette ${S.d=="v"?"solo vegetali (niente carne, pesce, uova, latticini)":"anche con carne, pesce, uova e latticini"} per ${S.p} ${S.p>1?"persone":"persona"} che usino il più possibile questi ingredienti. Puoi dare per scontati sale, pepe, olio e acqua.${S.ex?" Evita assolutamente: "+S.ex+".":""} Per ogni ricetta scrivi: una prima riga '## Nome (minuti)', poi 'Ingredienti: ...' con le quantità, poi 'Da comprare: ...' (scrivi 'niente' se non serve nulla), poi 'Passaggi:' con 3 o 4 passaggi brevi su righe separate. Rispondi in italiano, senza altro markdown e senza introduzioni.`;
+let nt="";if(S.k){try{const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+GM+":generateContent?key="+encodeURIComponent(S.k),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:P}]}]})});const j=await r.json();if(!r.ok)throw{api:(j.error&&j.error.message)||r.status};const c=j.candidates&&j.candidates[0];if(!c)throw{api:"nessuna risposta"};FO=fmt(c.content.parts.map(p=>p.text||"").join(""));fo.innerHTML=FO;b.disabled=false;return}catch(e){if(e.api){FO=`<p class="mu">Gemini ha risposto con un errore: ${esc(String(e.api))}. Controlla la chiave.</p>`;fo.innerHTML=FO;b.disabled=false;return}nt=`<p class="mu">Non riesco a contattare Gemini: controlla la connessione.</p>`}}
+if(!sm){FO=nt||`<p class="mu">Per usare il frigo inserisci la tua chiave Gemini nelle impostazioni.</p>`;fo.innerHTML=FO;b.disabled=false;return}
+try{await sm(P,{modelTier:"quick",cache:false,onText:({text})=>{FO=nt+fmt(text);fo.innerHTML=FO}})}catch(e){const M={not_granted:"Per usare questa funzione devi consentire a Claude di rispondere.",rate_limited:"Troppe richieste ravvicinate: riprova fra poco."};FO=(e.text?fmt(e.text):"")+`<p class="mu">${M[e.code]||"Qualcosa è andato storto. Riprova."}</p>`;fo.innerHTML=FO}
+b.disabled=false}
+const GM="gemini-3.5-flash";
+const NOME="",DEDICA="";
+const cp=()=>S.menu.reduce((s,i,k)=>{if(!ac(k))return s;const r=D[i];return s+r.i.reduce((t,x)=>{if(S.pa[x.n+"|"+x.u])return t;const v=pz(x);return t+(v==null?r.c/r.i.length:v)},0)*portion(k)},0)*S.p;
+function pa(i){S.pa[KS[i]]=true;sv();R()}
+function pb(i){delete S.pa[PK[i]];sv();R()}
+function PL(){const ks=window.PK=Object.keys(S.pa).filter(k=>S.pa[k]);if(!ks.length)return"";return `<h3 class="ph">Già in casa</h3><ul class="lst">`+ks.map((k,i)=>`<li><span style="flex:1">${k.split("|")[0]}</span><button class="i" onclick="pb(${i})" aria-label="Rimetti in lista">↩</button></li>`).join("")+"</ul>"}
+function fv(i){S.f[i]=!S.f[i];sv();o(i);R()}
+const CK={i:0,s:0,t:0,left:0};
+function ck(i){CK.i=i;CK.s=0;cl();CKR();document.getElementById("ck").classList.add("o");try{navigator.wakeLock&&navigator.wakeLock.request("screen").catch(()=>{})}catch(e){}}
+function cx(){clearInterval(CK.t);document.getElementById("ck").classList.remove("o")}
+function tm(n){clearInterval(CK.t);CK.left=n*60;const u=()=>{const e=document.getElementById("tl");if(e)e.textContent=Math.floor(CK.left/60)+":"+String(CK.left%60).padStart(2,"0");if(CK.left--<=0){clearInterval(CK.t);try{navigator.vibrate&&navigator.vibrate([300,150,300])}catch(x){}if(e)e.textContent="Tempo scaduto!"}};u();CK.t=setInterval(u,1000)}
+function CKR(){const r=D[CK.i],t=r.s[CK.s],mt=t.match(/(\d+) minut/),L=r.s.length-1;document.getElementById("ck").innerHTML=`<div class="row"><small class="mu" style="flex:1">${r.n} · passaggio ${CK.s+1} di ${L+1}</small><button class="i" onclick="cx()" aria-label="Chiudi">✕</button></div><div class="stp"><p>${t}</p>${mt?`<button class="b s" onclick="tm(${mt[1]})">⏱ Timer ${mt[1]} min</button><div id="tl" class="mu"></div>`:""}</div><div class="bar"><button class="b s" onclick="CK.s>0&&(CK.s--,CKR())">Indietro</button><button class="b" onclick="${CK.s<L?"CK.s++;CKR()":"cx()"}">${CK.s<L?"Avanti":"Fine"}</button></div>`}
+function NX(){const d=new Date(),w=(d.getDay()+6)%7,s=S.dm[w]=="p"?0:S.dm[w]=="c"?1:d.getHours()<15?0:1,i=S.menu[w*2+s],r=D[i];return `<div class="hero" onclick="o(${i},${w*2+s})"><span class="em">${em(r.n)}</span><div><small>Prossimo pasto · ${G[w]} ${s?"cena":"pranzo"}</small><h2>${r.n}</h2><span>${r.m} min · €${(r.c*S.p*portion(w*2+s)).toFixed(2).replace(".",",")}</span></div></div>`}
+function RL(){const q=Q.trim().toLowerCase(),a=D.map((r,i)=>[r,i]).filter(([r])=>!q||(r.n+" "+r.i.map(x=>x.n).join(" ")).toLowerCase().includes(q)).sort((x,y)=>!!S.f[y[1]]-!!S.f[x[1]]);rl.innerHTML=a.length?`<ul class="rc">`+a.map(([r,i])=>`<li onclick="o(${i})"><span class="em">${em(r.n)}</span><span class="tt"><b>${S.f[i]?"♥ ":""}${r.n}</b><small>${r.m} min · €${r.c.toFixed(1).replace(".",",")} a persona · ${r.o?"onnivora":"vegetale"}${r.l?" · ✨ luxury":""}${r.g?" · ✓ dati GialloZafferano":""}${xs(r)?" · ⚠ da evitare":""}</small></span></li>`).join("")+`</ul>`:`<p class="mu">Nessuna ricetta trovata. Prova con un altro nome o ingrediente.</p>`}
+function tk(k){S.chk[k]=!S.chk[k];sv();R()}
+function R(){let h="";
+if(T=="m"){h=NX()+`<div class="ct"><div class="sg"><button class="${S.d=="v"?"on":""}" onclick="sd('v')">Vegetale</button><button class="${S.d=="o"?"on":""}" onclick="sd('o')">Onnivoro</button></div><select onchange="sb(this.value)" aria-label="Budget settimanale">${[30,40,50,60,80,100,130,160,200,250,300].map(x=>`<option value="${x}" ${x==S.b?"selected":""}>€${x} a settimana</option>`).join("")}</select><button class="lx${S.l?" on":""}" onclick="sl()">✨ Luxury</button><p>Spesa stimata circa €${Math.round(cost(S.menu))}${cost(S.menu)>S.b?", sopra il budget: prova ad abbassare le persone o ad alzare il budget":""}.</p>${KS2()}${S.kc&&TP()?`<button class="b s" onclick="fitAllPortions()">Adatta tutti i pasti al fabbisogno</button><p>Porzioni distribuite sul fabbisogno stimato per pranzo e cena di ogni giorno.</p>`:""}</div><button class="b" onclick="gen();R()">Nuovo menu</button>`;G.forEach((g,d)=>{h+=`<section class="day"><h2>${g}${dkc(d)}</h2><div><div class="dm">${[["t","Pranzo e cena"],["p","Pranzo"],["c","Cena"]].map(x=>`<button class="${S.dm[d]==x[0]?"on":""}" onclick="pm(${d},'${x[0]}')">${x[1]}</button>`).join("")}</div>`;[0,1].filter(s=>ac(d*2+s)).forEach(s=>{const k=d*2+s,i=S.menu[k],r=D[i];h+=`<div class="row"><span class="em">${em(r.n)}</span><div onclick="o(${i},${k})"><small>${s?"Cena":"Pranzo"}</small><b>${r.n}</b><em>${r.m} min${S.kc&&r.k?" · "+nf(r.k*portion(k))+" kcal":""}</em></div><button class="i" onclick="picker(${k})" aria-label="Scegli ricetta per ${s?"cena":"pranzo"} di ${g}">＋</button><button class="i" onclick="sw(${k})" aria-label="Cambia ${s?"cena":"pranzo"} di ${g}">↻</button></div>`});h+="</div></section>"})}
+else if(T=="f"){h=FR()}else if(T=="r"){h=`<input id="q" class="q" type="search" placeholder="Cerca una ricetta o un ingrediente" value="${Q.replace(/"/g,"&quot;")}" oninput="Q=this.value;RL()" aria-label="Cerca ricette"><div id="rl"></div>`}
+else{const a={};S.menu.forEach((i,j)=>ac(j)&&D[i].i.forEach(x=>{const k=x.n+"|"+x.u;a[k]=(a[k]||0)+x.q*S.p*portion(j)}));const ks=window.KS=Object.keys(a).filter(k=>!S.pa[k]).sort((x,y)=>x.localeCompare(y,"it"));
+h=`<p style="color:var(--mu)">Tutto quello che serve per i 7 giorni, per ${S.p} ${S.p>1?"persone":"persona"}. Costo stimato: circa €${Math.round(cp())}${Object.values(S.pa).some(Boolean)?" (togliendo quello che hai già in casa)":""}.</p><a class="b" href="https://wa.me/?text=${encodeURIComponent("Lista della spesa:\n"+ks.filter(k=>!S.chk[k]).map(k=>"- "+k.split("|")[0]+" "+f(a[k])+" "+k.split("|")[1]).join("\n"))}" target="_blank" rel="noopener">Manda su WhatsApp</a> <button class="b s" onclick="S.chk={};sv();R()">Togli tutte le spunte</button> <button class="b s" onclick="PE()">💶 Prezzi</button><ul class="lst">`+ks.map(k=>{const[n,u]=k.split("|");return`<li><input type="checkbox" id="c${ks.indexOf(k)}" ${S.chk[k]?"checked":""} onchange="tk('${k.replace(/'/g,"\\'")}')"><label for="c${ks.indexOf(k)}" class="${S.chk[k]?"d":""}" style="flex:1"><span>${n}</span></label><span>${f(a[k])} ${u}${pv(n,u)==null?"":" · €"+(a[k]*pv(n,u)/(u=="g"||u=="ml"?1000:1)).toFixed(2).replace(".",",")}</span><button class="i" onclick="pa(${ks.indexOf(k)})" aria-label="Ce l'ho già">🏠</button></li>`}).join("")+"</ul>"+PL()}
+v.innerHTML=h;if(T=="r")RL();document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t==T))}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{T=b.dataset.t;R();scrollTo(0,0)});
+pn.textContent=S.p;T0();PHu();R();if(!S.seen&&!S.nm&&!DEDICA)PRf(1);if(DEDICA&&!S.seen){mc.innerHTML=`<h2>${NOME?"Ciao "+esc(NOME)+" 💛":"Per te 💛"}</h2><p style="font-size:18px;line-height:1.5;white-space:pre-line">${esc(DEDICA)}</p><button class="b" onclick="cl()">Iniziamo</button>`;m.classList.add("o");S.seen=1;sv()}
+</script><script>if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script></body></html>
